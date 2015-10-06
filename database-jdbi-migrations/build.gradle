@@ -1,0 +1,64 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+// Use Java 8 by default
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+// UTF-8 should be standard by now. So use it!
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+// The main class of the application
+mainClassName = 'com.example.database.JDBIApplication'
+
+// Jar/artifact version
+version = '1.0'
+  
+// Set our project variables
+project.ext {
+	dropwizardVersion = '0.8.4'
+	dropwizardModulesVersion = '0.8.0-2'
+	mariadbConnectorVersion = '1.2.3'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile (
+	   'io.dropwizard:dropwizard-core:' + dropwizardVersion,
+	   'io.dropwizard:dropwizard-jdbi:' + dropwizardVersion,
+	   'io.dropwizard:dropwizard-migrations:' + dropwizardVersion,
+	   'org.mariadb.jdbc:mariadb-java-client:' + mariadbConnectorVersion	   
+	)
+}
+
+// Configure the run task to start the Dropwizard service
+run {
+	args 'server', 'jdbi.yml'
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.4'
+}
+
+// Create the executable jar and exclude some certificates
+jar {
+ 
+	manifest {
+		attributes "Implementation-Title": "JDBI Migrations Example"
+		attributes "Implementation-Version": version
+		attributes "Main-Class" : mainClassName
+	}
+ 
+	// remove the security files (from mail.jar / activation.jar) so that the jar will be executable.
+	doFirst {
+		from (configurations.runtime.resolve().collect { it.isDirectory() ? it : zipTree(it) }) {
+			exclude 'META-INF/MANIFEST.MF'
+			exclude 'META-INF/*.SF'
+			exclude 'META-INF/*.DSA'
+			exclude 'META-INF/*.RSA'
+		}
+	}
+}
