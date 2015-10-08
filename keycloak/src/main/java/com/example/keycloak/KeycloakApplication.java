@@ -24,7 +24,7 @@ public class KeycloakApplication extends Application<KeycloakConfiguration> {
 
 	@Override
 	public String getName() {
-		return "hello-world";
+		return "keycloak";
 	}
 
 	@Override
