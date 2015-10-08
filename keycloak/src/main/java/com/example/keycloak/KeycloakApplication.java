@@ -2,20 +2,14 @@ package com.example.keycloak;
 
 
 import io.dropwizard.Application;
-import io.dropwizard.auth.AuthFactory;
-import io.dropwizard.jersey.sessions.HttpSessionFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-import org.eclipse.jetty.security.ConstraintSecurityHandler;
-import org.eclipse.jetty.server.session.SessionHandler;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
-import org.keycloak.adapters.jetty.KeycloakJettyAuthenticator;
+import org.keycloak.representations.adapters.config.AdapterConfig;
 
-import de.ahus1.lottery.adapter.dropwizard.util.Authentication;
-import de.ahus1.lottery.adapter.dropwizard.util.KeycloakAuthFactory;
-import de.ahus1.lottery.adapter.dropwizard.util.KeycloakAuthenticator;
-import de.ahus1.lottery.adapter.dropwizard.util.KeycloakDropwizardAuthenticator;
+import de.ahus1.keycloak.dropwizardjaxrs.KeycloakAuthFactory;
+import de.ahus1.keycloak.dropwizardjaxrs.KeycloakBundle;
 
 public class KeycloakApplication extends Application<KeycloakConfiguration> {
 	public static void main(String[] args) throws Exception {
@@ -29,25 +23,23 @@ public class KeycloakApplication extends Application<KeycloakConfiguration> {
 
 	@Override
 	public void initialize(Bootstrap<KeycloakConfiguration> bootstrap) {
-		// nothing to do yet
+		bootstrap.addBundle(new KeycloakBundle<KeycloakConfiguration>() {
+            @Override
+            protected KeycloakAuthFactory createAuthFactory(KeycloakConfiguration configuration) {
+                return new KeycloakAuthFactory(getKeycloakConfiguration(configuration), "dropwizard",
+                        new KeycloakAuthenticator(), Authentication.class);
+            }
+
+            @Override
+            protected AdapterConfig getKeycloakConfiguration(KeycloakConfiguration configuration) {
+                return configuration.getKeycloakConfiguration();
+            }
+        });
 	}
 
 	@Override
 	public void run(KeycloakConfiguration configuration,
 			Environment environment) {
-        KeycloakJettyAuthenticator keycloak = new KeycloakDropwizardAuthenticator();
-        keycloak.setAdapterConfig(configuration.getKeycloakConfiguration());
-        ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
-        environment.getApplicationContext().setSecurityHandler(securityHandler);
-        environment.getApplicationContext().getSecurityHandler().setAuthenticator(keycloak);
-
-        KeycloakAuthFactory authFactory = new KeycloakAuthFactory(configuration.getKeycloakConfiguration(), "dropwizard", new KeycloakAuthenticator(), Authentication.class);
-        environment.jersey().register(AuthFactory.binder(authFactory));
-
-        // allow (stateful) sessions in Dropwizard
-        environment.jersey().register(HttpSessionFactory.class);
-        environment.servlets().setSessionHandler(new SessionHandler());
-
         // register web resources.
         environment.jersey().register(new KeycloakResource());
 

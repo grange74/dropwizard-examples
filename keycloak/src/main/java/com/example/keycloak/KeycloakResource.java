@@ -11,8 +11,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
 
-import de.ahus1.lottery.adapter.dropwizard.util.Authentication;
-
 @Path("/keycloak")
 @Produces(MediaType.TEXT_PLAIN)
 public class KeycloakResource {
