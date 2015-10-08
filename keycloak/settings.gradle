@@ -1,0 +1,2 @@
+include ':keycloak-dropwizard-jaxrs'
+project(':keycloak-dropwizard-jaxrs').projectDir = file('../../keycloak-dropwizard-integration/keycloak-dropwizard-jaxrs')

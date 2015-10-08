@@ -1,0 +1,12 @@
+# To obtain your own settings, create a new Client in a Realm in Keycloak 
+# and go the Installation tab and download the Keycloak JSON file.
+keycloakConfiguration:
+  realm: test
+  realmKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAig3Qu7yMtR2h2qkCoTgpyyycfDLu/iGpTp900r871p415BG+FyTDKmkrBELGrx+yFvPSY6D8kWKMICIi96p40ZVaJfCiaPcxa3V4RWnseeLkbiexRFQZZxKDmUEwnUiGgQi4sAU32ponmTHrT4bY/TYramBH19MjNUKTlMZdWzJy2MlH8k2RNN1XZQusFbn9hCWQQtcyVIptfXc2cobg/m243Xg5VciawhM+qW8/T0k+gVo35SVP70wK/hf83Dsy2aKwcMh3pgFbdYaY8HjnzOHSMn3aWLHKAl8KbzfuPvhy0eXoG2hPdtkl8c2A0JQypp/VSSuMVj2Z3fO+UgnZmwIDAQAB"
+  authServerUrl: http://192.168.99.100:8080/auth
+  sslRequired: none
+  registerNodeAtStartup: true
+  registerNodePeriod: 600
+  resource: dropwizard-keycloak
+  credentials:
+    secret: f00e44a2-4df2-45c6-82ca-758c0cd996eb

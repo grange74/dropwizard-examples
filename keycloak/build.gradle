@@ -1,0 +1,52 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+// Use Java 8 by default
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+// UTF-8 should be standard by now. So use it!
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+// The main class of the application
+mainClassName = 'com.example.keycloak.KeycloakApplication'
+
+// Jar/artifact version
+version = '1.0'
+  
+// Set our project variables
+project.ext {
+	dropwizardVersion = '0.8.4'
+	//keycloakVersion = '1.5.0-Final'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile (
+	   'io.dropwizard:dropwizard-core:' + dropwizardVersion,
+	   // Uses this project https://github.com/grange74/keycloak-dropwizard-integration/tree/GRADLE-MODULE
+	   project(':keycloak-dropwizard-jaxrs')
+	)
+}
+
+// Configure the run task to start the Dropwizard service
+run {
+	args 'server', 'keycloak.yml'
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.4'
+}
+
+// Create the executable jar and exclude some certificates
+jar {
+ 
+	manifest {
+		attributes "Implementation-Title": "Keycloak Example"
+		attributes "Implementation-Version": version
+		attributes "Main-Class" : mainClassName
+	}
+}
