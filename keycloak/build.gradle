@@ -17,18 +17,18 @@ version = '1.0'
 // Set our project variables
 project.ext {
 	dropwizardVersion = '0.8.4'
-	//keycloakVersion = '1.5.0-Final'
+	keycloakModuleVersion = '0.2.0'
 }
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 dependencies {
 	compile (
 	   'io.dropwizard:dropwizard-core:' + dropwizardVersion,
-	   // Uses this project https://github.com/grange74/keycloak-dropwizard-integration/tree/GRADLE-MODULE
-	   project(':keycloak-dropwizard-jaxrs')
+	   'de.ahus1.keycloak.dropwizard:keycloak-dropwizard:' + keycloakModuleVersion
 	)
 }
 

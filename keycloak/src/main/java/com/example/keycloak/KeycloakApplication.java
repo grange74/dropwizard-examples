@@ -6,11 +6,11 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
-import org.keycloak.representations.adapters.config.AdapterConfig;
 
 import de.ahus1.keycloak.dropwizard.KeycloakBundle;
+import de.ahus1.keycloak.dropwizard.KeycloakConfiguration;
 
-public class KeycloakApplication extends Application<KeycloakConfiguration> {
+public class KeycloakApplication extends Application<KeycloakConfig> {
 	public static void main(String[] args) throws Exception {
 		new KeycloakApplication().run(args);
 	}
@@ -21,17 +21,17 @@ public class KeycloakApplication extends Application<KeycloakConfiguration> {
 	}
 
 	@Override
-	public void initialize(Bootstrap<KeycloakConfiguration> bootstrap) {
-		bootstrap.addBundle(new KeycloakBundle<KeycloakConfiguration>() {
+	public void initialize(Bootstrap<KeycloakConfig> bootstrap) {
+		bootstrap.addBundle(new KeycloakBundle<KeycloakConfig>() {
             @Override
-            protected AdapterConfig getKeycloakConfiguration(KeycloakConfiguration configuration) {
+            protected KeycloakConfiguration getKeycloakConfiguration(KeycloakConfig configuration) {
                 return configuration.getKeycloakConfiguration();
             }
         });
 	}
 
 	@Override
-	public void run(KeycloakConfiguration configuration,
+	public void run(KeycloakConfig configuration,
 			Environment environment) {
         // register web resources.
         environment.jersey().register(new KeycloakResource());
