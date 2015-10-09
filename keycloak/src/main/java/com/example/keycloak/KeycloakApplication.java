@@ -8,8 +8,7 @@ import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.keycloak.representations.adapters.config.AdapterConfig;
 
-import de.ahus1.keycloak.dropwizardjaxrs.KeycloakAuthFactory;
-import de.ahus1.keycloak.dropwizardjaxrs.KeycloakBundle;
+import de.ahus1.keycloak.dropwizard.KeycloakBundle;
 
 public class KeycloakApplication extends Application<KeycloakConfiguration> {
 	public static void main(String[] args) throws Exception {
@@ -24,12 +23,6 @@ public class KeycloakApplication extends Application<KeycloakConfiguration> {
 	@Override
 	public void initialize(Bootstrap<KeycloakConfiguration> bootstrap) {
 		bootstrap.addBundle(new KeycloakBundle<KeycloakConfiguration>() {
-            @Override
-            protected KeycloakAuthFactory createAuthFactory(KeycloakConfiguration configuration) {
-                return new KeycloakAuthFactory(getKeycloakConfiguration(configuration), "dropwizard",
-                        new KeycloakAuthenticator(), Authentication.class);
-            }
-
             @Override
             protected AdapterConfig getKeycloakConfiguration(KeycloakConfiguration configuration) {
                 return configuration.getKeycloakConfiguration();

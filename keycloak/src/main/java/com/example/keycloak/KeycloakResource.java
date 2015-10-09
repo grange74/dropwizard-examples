@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
 
+import de.ahus1.keycloak.dropwizard.User;
+
 @Path("/keycloak")
 @Produces(MediaType.TEXT_PLAIN)
 public class KeycloakResource {
@@ -22,9 +24,9 @@ public class KeycloakResource {
 
 	@GET
 	@Timed
-	public String accessOnlyIfAuthenticated(@Auth Authentication user) {
+	public String accessOnlyIfAuthenticated(@Auth User user) {
 
 		return "Authenticated access count: " + counter.incrementAndGet() + 
-			". Current user: " + user.getIdToken().getName();
+			". Current user: " + user.getName();
 	}
 }
