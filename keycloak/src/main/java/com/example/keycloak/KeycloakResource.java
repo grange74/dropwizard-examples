@@ -16,17 +16,36 @@ import de.ahus1.keycloak.dropwizard.User;
 @Path("/keycloak")
 @Produces(MediaType.TEXT_PLAIN)
 public class KeycloakResource {
-	private final AtomicLong counter;
+	private final AtomicLong secureCounter;
+	private final AtomicLong insecureCounter;
 
 	public KeycloakResource() {
-		this.counter = new AtomicLong();
+		this.secureCounter = new AtomicLong();
+		this.insecureCounter = new AtomicLong();
 	}
 
 	@GET
 	@Timed
-	public String accessOnlyIfAuthenticated(@Auth User user) {
+	@Path("secure")
+	public String secureMethod(@Auth User user) {
 
-		return "Authenticated access count: " + counter.incrementAndGet() + 
+		return "Authenticated access count: " + secureCounter.incrementAndGet() + 
 			". Current user: " + user.getName();
+	}
+	
+	@GET
+	@Timed
+	@Path("insecure")
+	public String insecureMethod() {
+
+		return "Free access count: " + insecureCounter.incrementAndGet() + ".";
+	}
+	
+	@GET
+	@Timed
+	@Path("logout")
+	public String logout(@Auth User user) {
+		user.logout();
+		return "Successfully logged out : " + user.getName();
 	}
 }
