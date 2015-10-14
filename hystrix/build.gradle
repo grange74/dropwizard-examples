@@ -1,0 +1,53 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+// Use Java 8 by default
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+// UTF-8 should be standard by now. So use it!
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+// The main class of the application
+mainClassName = 'com.example.hystrix.HystrixApplication'
+
+// Jar/artifact version
+version = '1.0'
+  
+// Set our project variables
+project.ext {
+	dropwizardVersion = '0.8.4'
+	hystrixModuleVersion = '0.3'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile (
+	   'io.dropwizard:dropwizard-core:' + dropwizardVersion,
+	   'org.zapodot:hystrix-dropwizard-bundle:' + hystrixModuleVersion
+	)
+}
+
+applicationDefaultJvmArgs = ['-Darchaius.configurationSource.additionalUrls=file:///Users/nic/GitHub/dropwizard-examples/hystrix/override.properties']
+
+// Configure the run task to start the Dropwizard service
+run {
+	args 'server'//, 'hystrix.yml
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.4'
+}
+
+// Create the executable jar and exclude some certificates
+jar {
+ 
+	manifest {
+		attributes "Implementation-Title": "Hystrix Example"
+		attributes "Implementation-Version": version
+		attributes "Main-Class" : mainClassName
+	}
+}
