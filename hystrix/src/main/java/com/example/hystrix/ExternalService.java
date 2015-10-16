@@ -14,14 +14,18 @@ public class ExternalService {
 
     public static synchronized String justDoIt()
             throws InterruptedException {
+    	
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
+        
+        // simulate doing so long task
         long t = timeToWait.get();
         LOG.info("waiting {} ms", t);
         if (t > 0) {
             Thread.sleep(t);
         }
+     
         return "Did it after sleeping " + t + " ms." ;
     }
 }
