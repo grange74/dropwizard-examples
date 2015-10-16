@@ -48,9 +48,9 @@ public class HystrixResource {
 			return "External Service returned: " + future.get();
 		} 
 		catch (InterruptedException e) {
-			return "InterruptedException";
+			return "The Thread was interrupted.";
 		} catch (ExecutionException e) {
-			return "ExecutionException";
+			return "Task aborted by throwing an exception.";
 		}
 	}
 	
@@ -68,6 +68,8 @@ public class HystrixResource {
 		// doing some other stuff
 		
 		observable.subscribe(new HystrixObserver());
+		
+		LOG.info("Observing the ExternalService call");
 		
 		return "Your request is being Observed";
 	}

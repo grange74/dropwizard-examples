@@ -18,7 +18,7 @@ public class ExternalServiceCommand extends HystrixCommand<String> {
         try {
 			return ExternalService.justDoIt();
 		} catch (InterruptedException e) {
-			LOG.error("The justDoIt method just throw an InterruptedException method.");
+			LOG.error("The justDoIt Thread was interrupted.");
 		}
 		return "Couldn't do it";
     }
